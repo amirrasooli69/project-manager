@@ -3,10 +3,21 @@ POST  http://localhost:3000/auth/register
 Content-Type: application/json
 
 {
-    "username": "amirrasooli2",
-    "email": "amirrasooli2@gmail.com",
-    "mobile": "09127173427",
+    "username": "amirrasooli3",
+    "email": "amirrasooli3@gmail.com",
+    "mobile": "09127173429",
     "password": "1234567",
     "confirm_password": "1234567"
+
+}
+
+### login request
+POST  http://localhost:3000/auth/login
+Content-Type: application/json
+
+{
+    "username": "amirrasooli3",
+    "password": "1234567"
+
 
 }
