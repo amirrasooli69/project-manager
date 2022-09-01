@@ -1,5 +1,8 @@
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const path = require("path");
+const fs = require("fs");
+
 function hashString(str) {
     const salt = bcrypt.genSaltSync(10);
     return bcrypt.hashSync(str,salt)
@@ -16,8 +19,19 @@ function verifyJwtToken(token){
     return result;
 
 }
+
+function createUploadPath(){
+    const d = new Date();
+    const year = "" + d.getFullYear();
+    const month = "" + d.getMonth();
+    const day = "" + d.getDate();
+    const uploadPath = path.join(__dirname, "..", ".." , "public", "upload", year, month, day);
+    fs.mkdirSync(uploadPath, {recursive: true});
+    return path.join("public", "upload", year, month, day)
+}
 module.exports = {
     hashString,
     tokenGenerator,
-    verifyJwtToken
+    verifyJwtToken,
+    createUploadPath
 }
