@@ -4,6 +4,8 @@ class UserController {
     getProfile(req, res, next){
         try {
             const user = req.user;
+            // user.profile_image.replace(/[\\\\]/,"/") change address file when read file with regx
+            user.profile_image = req.protocol + "://" + req.get("host") + "/" + user.profile_image.replace(/[\\\\]/,"/");
             return res.status(200).json({
                 status: 200,
                 success: true,
@@ -42,7 +44,19 @@ class UserController {
 
     async uploadProfileImage(req, res, next){
         try {
-            console.log(req.file)
+            const userID = req.user._id;
+            if(Object.keys(req.file) == 0 ) throw({status: 400, success: false, message: "لطفا فایلی بارگزاری کنید"})
+            // change address file when save file
+            // const filePath = req.file?.path.replace("\\","/").substring(7);
+            const filePath = req.file?.path.substring(7);
+            const result = await UserModel.updateOne({_id: userID}, {$set: {profile_image: filePath}});
+            if(result.modifiedCount == 0) throw({status: 400, message: "به روزرسانی انجام نشد"})
+            // console.log(req.file)
+            return res.status(200).json({
+                status: 200,
+                success: true,
+                message: "به روزرسانی انجام شد"
+            })
         } catch (error) {
             next(error)
         }
